@@ -80,7 +80,7 @@
 
   import TabControl from 'components/content/tabControl/TabControl.vue';
 
-  import {getHomeMultidata} from "network/home";
+  import {getHomeMultidata, getHomeGoods} from "network/home";
 
 export default {
   name: "Home",
@@ -95,7 +95,12 @@ export default {
     return {
       result: null,
       banners: [],
-      recommends: []
+      recommends: [],
+      goods: {
+        'pop': {page: 0,list: []},
+        'news': {page: 0,list: []},
+        'sell': {page: 0,list: []},
+      }
     }
   },
   created() {
@@ -105,6 +110,9 @@ export default {
       this.result = res;
       this.banners = res.data.data.banner.list;
       this.recommends = res.data.data.recommend.list;
+    }),
+    getHomeGoods('pop',1).then(res => {
+      console.log(res);
     })
   }
 }
