@@ -4,8 +4,10 @@
     <home-swiper :banners="banners" />
     <recommend-view :recommends="recommends" />
     <feature-view />
-    <tab-control class="tab-control" :titles="['流行','新款','精品']"/>
-    <goods-list :goods="goods['pop'].list"/>
+    <tab-control class="tab-control" 
+    :titles="['流行','新款','精品']" 
+    @tabClick="tabClick"/>
+    <goods-list :goods="showGoods"/>
 </div>
 </template>
 <script>
@@ -39,7 +41,15 @@ export default {
         'pop': {page: 0,list: []},
         'new': {page: 0,list: []},
         'sell': {page: 0,list: []},
-      }
+      },
+      // 用于存放index变化时的值
+      currentType: 'pop'
+    }
+  },
+  // 添加一个计算属性，展示在goods-list中
+  computed: {
+    showGoods() {
+      return this.goods[this.currentType].list
     }
   },
   created() {
@@ -51,6 +61,29 @@ export default {
     this.getHomeGoods('sell');
   },
   methods: {
+    /**
+     * 事件监听相关的方法
+     * 
+     */
+    tabClick(index) {
+      switch (index) {
+        case 0:
+          this.currentType = 'pop'
+          break;
+        case 1:
+          this.currentType = 'new'
+          break;
+        case 2:
+          this.currentType = 'sell'
+          break;
+      }
+    },
+
+
+
+    /**
+     * 网络请求相关的方法
+     */
     getHomeMultidata() {
       getHomeMultidata().then(res => {
         // this.result = res;
